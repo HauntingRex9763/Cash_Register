@@ -1,4 +1,14 @@
 class Add_Product_Window:
+    '''
+    ***UNDER CONSTRUCTION - IGNORE ME***
+    Methods:
+    --------
+    __init__(self, window)
+        WORDS
+    
+    add_product(self)
+        WORDS
+    '''
     def __init__(self, window):
         # Delete old window
         window.destroy()
@@ -38,6 +48,21 @@ class Add_Product_Window:
             tk.Label(self.window, text = "Product added, press return to add another product or 'Q' to go to home page").grid(row=0, column=0) 
 
 class Product_Window:
+    '''
+    Methods:
+    --------
+    __init__
+        Creates a new window, deletes the old one, and displays options to either buy, restock, or delete the selected object from Main_Page
+
+    transaction(window, product, ID)
+        clears the window, and makes entry for the quantity to be either stocked or sold depending on the selection from __INIT__
+    
+    getter(self)
+        gets the entry from transaction, checks it, and tries it in Product.transaction
+
+    delete(self)
+        deletes the product from the inventory_csv.csv
+    '''
     def __init__(self, window, product, ID):
         print(product, ID)
         self.in_prod = product
@@ -111,6 +136,10 @@ class Product_Window:
             tk.Label(self.window, text = "Delete complete, press return to go back to delete again page or 'Q' to go to home page").grid(row=0, column=0)
 
 class Main_Page:
+    '''
+    __init__
+        cycles through inventory_csv.csv and posts a button representing each item in the store's inventory 
+    '''
     def __init__(self, window):
         # Delete old window
         window.destroy()
