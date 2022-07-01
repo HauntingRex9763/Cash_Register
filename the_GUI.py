@@ -153,11 +153,10 @@ class Main_Page:
         for product, i in zip(Product.get_inventory_list(), range(0, len(Product.get_inventory_list()))):
             product = product.split(',')
             j = i // 10; i -= j * 10
-            print(product)
-            tk.Button(self.window, text = product[0], command = lambda: Product_Window(self.window, product, int(product[-1][0:4]))).grid(row = j + 1, column = i)
+            tk.Button(self.window, text = product[0], command = partial(Product_Window, self.window, product, int(product[-1][0:4]))).grid(row = j + 1, column = i)
         self.window.title('Belleisle Gardens Cash Register')
         self.window.geometry("1000x300")
         self.window.mainloop()
 
-import tkinter as tk; from product import *
+import tkinter as tk; from product import *; from functools import partial
 Main_Page(tk.Tk())
