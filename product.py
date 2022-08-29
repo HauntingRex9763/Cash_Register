@@ -71,43 +71,42 @@ Product:
         pass
 
     @staticmethod
-    def transaction(ID, quantity=float, key = str):
+    def transaction(cart = list, key = str):
 
-        Product.__zero_check(quantity)
+        #Product.__zero_check(quantity)
         pd_file = pd.read_csv(f'{os.getcwd()}\inventory_csv.csv', header = None)
 
-        # Updates inventory
+        # Open files and create writers
         with open(f'{os.getcwd()}\inventory_csv.csv','w',newline='') as inventory_file:
-            writer = csv.writer(inventory_file)
-            for i, row in zip(pd_file.values, range(0, len(pd_file.values) + 1)):
-                # Catches bought item by ID
-                if row == int(pd_file.index[pd_file[3] == int(ID)][0]):
-                    
-                    # Check if stocked or bought, calls respective methods, and records the transaction
-                    if key == 'stocked':
-                        writer.writerow([i[0], i[1], i[2] + quantity, i[3]])
+            inventory_writer = csv.writer(inventory_file)
+            with open(f'{os.getcwd()}\sales_history_csv.csv','a',newline='') as sales_file:
+                sales_writer = csv.writer(sales_file)
 
-                        with open(f'{os.getcwd()}\sales_history_csv.csv','a',newline='') as sales_file:
-                            writer = csv.writer(sales_file)    
-                            writer.writerow(['RESTOCK',i[0], i[1], quantity, round(i[1] * quantity, 2), pd_file.values[pd_file.index[pd_file[3] == int(ID)]][0][2] - quantity, datetime.datetime.now()])
+                # Creates interaction labels
+                if key == 'sold': sales_writer.writerow(['TRANSACTION', datetime.datetime.now()])
+                elif key == 'stocked': sales_writer.writerow(['RESTOCK', datetime.datetime.now()])
 
-                        #return round(quantity * pd_file.values[pd_file.index[pd_file[3] == int(ID)]][0][1], 2)
+                # Creates a line for each item manipulated in an indent
+                for product, count in zip(cart, range(0, len(cart)+1)): 
+                    for i, row in zip(pd_file.values, range(0, len(pd_file.values) + 1)):
+                        if row == int(pd_file.index[pd_file[3] == int(product[2])][0]):
+                            
+                            # Check if stocked or bought, calls respective methods, and records the transaction
+                            if key == 'stocked':
+                                inventory_writer.writerow([i[0], i[1], i[2] + product[1], i[3]])
+                                sales_writer.writerow(['    RESTOCK',i[0], i[1], product[1], round(i[1] * product[1], 2), pd_file.values[pd_file.index[pd_file[3] == int(product[2])]][0][2] - product[1]])
 
-                    elif key == 'sold':
-                        writer.writerow([i[0], i[1], i[2] - quantity, i[3]])
+                            elif key == 'sold':
+                                inventory_writer.writerow([i[0], i[1], i[2] - product[1], i[3]])
+                                sales_writer.writerow(['    SOLD',i[0], i[1], product[1], round(i[1] * product[1], 2), pd_file.values[pd_file.index[pd_file[3] == int(product[2])]][0][2] + product[1]])
 
-                        with open(f'{os.getcwd()}\sales_history_csv.csv','a',newline='') as sales_file:
-                            writer = csv.writer(sales_file)    
-                            writer.writerow(['SOLD',i[0], i[1], quantity, round(i[1] * quantity, 2), pd_file.values[pd_file.index[pd_file[3] == int(ID)]][0][2] + quantity, datetime.datetime.now()])
+                        # Keeps unaltered items in the inventory csv
+                        else:
+                            if count == len(cart)-1: 
+                                inventory_writer.writerow([i[0], i[1], i[2], i[3]]) 
+                
+                return round(product[1] * pd_file.values[pd_file.index[pd_file[3] == int(product[2])]][0][1], 2)
 
-                        return round(quantity * pd_file.values[pd_file.index[pd_file[3] == int(ID)]][0][1], 2)
-
-                # If not bought item, keep same
-                else:
-                    writer.writerow([i[0], i[1], i[2], i[3]])
-  
-        
-    
     def get_name(self):
         return self._name
     
@@ -121,4 +120,4 @@ Product:
         return self._ID
 
 if '__main__' == __name__:
-    print(Product.transaction(1100, 2, 'stock'))
+    pass
