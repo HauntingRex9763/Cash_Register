@@ -2,7 +2,23 @@
 
 It's a cash
 
-Cash register application, records products in inventory_csv.csv via NAME,COST,INVENTORY,ID
-records sales history in sales_history_csv.csv TRANSACTION_TYPE,NAME,SINGLE_UNIT_COST,QUANTITY,TOTAL COST,REMAINING_STOCK,TIMESTAMP
-product.py contains a variety of methods used to manipulate the CSVs according to the_GUI's commands
-the_GUI.py is a file which contains the frontend for the application and sends requests to product.py
+cash_register.py
+UI which allows user to add products to a cart and make a purchase from the cart button
+
+inventory_management.py
+UI which allows user to add new products, delete products, make writeoffs, and restock products
+
+cart.py
+Stores all methods for shopping_cart var in cash_register
+
+product.py
+Handles new product creation methods and transacions
+
+inventory.csv
+Stores inventory data
+
+sales_history.csv
+Stores a transaction history
+
+totally_not_a_password.csv
+Move on, nothing to see here
